@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Text, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import styled from "styled-components";
+import Button from "../Button";
 
 const Container = styled.View`
   flex: 1;
@@ -29,12 +30,13 @@ class Timer extends Component {
   render() {
     return (
       <Container>
-        <StatusBar barStyle={"light-content"}/>
+        <StatusBar barStyle={"light-content"} />
         <Upper>
           <Time>25:00</Time>
         </Upper>
         <Lower>
-          <Text>BUTTONS HERE</Text>
+          <Button iconName="play-circle" onPress={() => alert("Start Btn")} />
+          <Button iconName="stop-circle" onPress={() => alert("Stop Btn")} />
         </Lower>
       </Container>
     );
