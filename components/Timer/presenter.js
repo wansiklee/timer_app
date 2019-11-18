@@ -5,7 +5,7 @@ import Button from "../Button";
 
 const Container = styled.View`
   flex: 1;
-  background-color: #ce0b24;
+  background-color: midnightblue;
 `;
 
 const Upper = styled.View`
@@ -26,20 +26,52 @@ const Time = styled.Text`
   font-weight: 100;
 `;
 
+function formatTime(time) {
+  let min = Math.floor(time / 60);
+  let sec = Math.floor(time % 60);
+  if (min < 10) {
+    min = `0` + min;
+  }
+  if (sec < 10) {
+    sec = `0` + sec;
+  }
+  return `${min}:${sec}`;
+}
+
 class Timer extends Component {
+  componentWillReceiveProps(nextProps) {
+    const currentProps = this.props;
+    if (!currentProps.isPlaying && nextProps.isPlaying) {
+      const timerInteval = setInterval(() => {
+        currentProps.addSecond();
+      }, 1000);
+      this.setState({
+        timerInteval
+      });
+    } else if (currentProps.isPlaying && !nextProps.isPlaying) {
+      clearInterval(this.state.timerInteval);
+    }
+  }
   render() {
-    const { isPlaying, elapsedTime, timerDuration } = this.props;
+    const {
+      isPlaying,
+      elapsedTime,
+      timerDuration,
+      startTimer,
+      restartTimer,
+      addSecond
+    } = this.props;
     return (
       <Container>
         <StatusBar barStyle={"light-content"} />
         <Upper>
-          <Time>25:00</Time>
+          <Time>{formatTime(timerDuration - elapsedTime)}</Time>
         </Upper>
         <Lower>
           {!isPlaying ? (
-            <Button iconName="play-circle" onPress={() => alert("Start Btn")} />
+            <Button iconName="play-circle" onPress={startTimer} />
           ) : (
-            <Button iconName="stop-circle" onPress={() => alert("Stop Btn")} />
+            <Button iconName="stop-circle" onPress={restartTimer} />
           )}
         </Lower>
       </Container>
